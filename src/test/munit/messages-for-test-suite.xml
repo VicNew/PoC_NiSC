@@ -5,6 +5,128 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
     <munit:config mock-connectors="false" mock-inbounds="false" name="munit" doc:name="MUnit configuration"/>
+    <sub-flow name="setExpectedPutUpdateServiceOrderResponse">
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-variable variableName="putUpdateServiceOrderResponse"><![CDATA[%dw 1.0
+%output application/json
+---
+{
+   OrderId:1234,
+   CustomerId:"0123456789",
+   ServicesBoundle:[
+      {
+         ServiceId:"5",
+         Description:"Service Description"
+      },
+      {
+         ServiceId:"3",
+         Description:"Service Description"
+      }
+   ],
+   Description:"Service Description",
+   Status:"Completed"
+}]]></dw:set-variable>
+        </dw:transform-message>
+    </sub-flow>
+    <sub-flow name="getUpdateServiceOrderRequestForTest">
+        <munit:set payload="#[]" doc:name="Set Message"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+   OrderId:1234,
+   CustomerId:"0123456789",
+   ServicesBoundle:[
+      {
+         ServiceId:"5",
+         Description:"Service Description"
+      },
+      {
+         ServiceId:"3",
+         Description:"Service Description"
+      }
+   ],
+   Description:"Service Description",
+   Status:"Completed"
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </sub-flow>
+    <sub-flow name="setExpectedGellAllServiceOrdersByFilterResponse">
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-variable variableName="expectedGellAllServiceOrdersByFilterResponse"><![CDATA[%dw 1.0
+%output application/json
+---
+[
+   {
+      OrderId:1234,
+      CustomerId:"0123456789",
+      ServicesBoundle:[
+         {
+            ServiceId:"5",
+            Description:"Service Description"
+         },
+         {
+            ServiceId:"3",
+            Description:"Service Description"
+         }
+      ],
+      Description:"Service Description",
+      Status:"Completed",
+      links:[
+         {
+            rel:"/linkrels/serviceOrder/info",
+            uri:"/service/order/1234",
+            method:"GET"
+         },
+         {
+            rel:"/linkrels/serviceOrder/updateInfo",
+            uri:"/service/order/1234",
+            method:"PUT"
+         },
+         {
+            rel:"/linkrels/serviceOrder/delete",
+            uri:"/service/order/1234",
+            method:"DELETE"
+         }
+      ]
+   },
+   {
+      OrderId:5678,
+      CustomerId:"0123456789",
+      ServicesBoundle:[
+         {
+            ServiceId:"5",
+            Description:"Service Description"
+         },
+         {
+            ServiceId:"3",
+            Description:"Service Description"
+         }
+      ],
+      Description:"Service Description",
+      Status:"Completed",
+      links:[
+         {
+            rel:"/linkrels/serviceOrder/info",
+            uri:"/service/order/5678",
+            method:"GET"
+         },
+         {
+            rel:"/linkrels/serviceOrder/updateInfo",
+            uri:"/service/order/5678",
+            method:"PUT"
+         },
+         {
+            rel:"/linkrels/serviceOrder/delete",
+            uri:"/service/order/5678",
+            method:"DELETE"
+         }
+      ]
+   }
+]]]></dw:set-variable>
+        </dw:transform-message>
+    </sub-flow>
     <sub-flow name="setExpectedVarErrorMessage500">
         <dw:transform-message doc:name="Transform Message">
             <dw:set-variable variableName="errorMessage500"><![CDATA[%dw 1.0
@@ -137,37 +259,37 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 %output application/json
 ---
 {
-   "OrderId":1234,
-   "CustomerId":"0123456789",
-   "ServicesBoundleStatus":[
+   OrderId:1234,
+   CustomerId:"0123456789",
+   ServicesBoundleStatus:[
       {
-         "ServiceId":"5",
-         "Description":"Service Description",
-         "Status":"Success"
+         ServiceId:"5",
+         Description:"Service Description",
+         Status:"Success"
       },
       {
-         "ServiceId":"3",
-         "Description":"Service Description",
-         "Status":"Success"
+         ServiceId:"3",
+         Description:"Service Description",
+         Status:"Success"
       }
    ],
-   "Description":"Service Description",
-   "Status":"Completed",
-   "links":[
+   Description:"Service Description",
+   Status:"Completed",
+   links:[
       {
-         "rel":"/linkrels/serviceOrder/info",
-         "uri":"/service/order/1234",
-         "method":"GET"
+         rel:"/linkrels/serviceOrder/info",
+         uri:"/service/order/1234",
+         method:"GET"
       },
       {
-         "rel":"/linkrels/serviceOrder/updateInfo",
-         "uri":"/service/order/1234",
-         "method":"PUT"
+         rel:"/linkrels/serviceOrder/updateInfo",
+         uri:"/service/order/1234",
+         method:"PUT"
       },
       {
-         "rel":"/linkrels/serviceOrder/delete",
-         "uri":"/service/order/1234",
-         "method":"DELETE"
+         rel:"/linkrels/serviceOrder/delete",
+         uri:"/service/order/1234",
+         method:"DELETE"
       }
    ]
 }]]></dw:set-variable>

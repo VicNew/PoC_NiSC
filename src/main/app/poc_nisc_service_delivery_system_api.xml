@@ -11,27 +11,40 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <exception-strategy ref="poc_nisc_service_delivery_system_api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
     <flow name="put:/service/order/{id}:application/json:poc_nisc_service_delivery_system_api-config">
+        <flow-ref name="setOrderIdVaribleFromURIId" doc:name="setOrderIdVaribleFromURIId"/>
+        <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
         <flow-ref name="updateServiceOrderById" doc:name="updateServiceOrderById"/>
+        <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
     <flow name="delete:/service/order/{id}:poc_nisc_service_delivery_system_api-config">
+        <flow-ref name="setOrderIdVaribleFromURIId" doc:name="setOrderIdVaribleFromURIId"/>
         <flow-ref name="deleteServiceOrderById" doc:name="deleteServiceOrderById"/>
+        <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
     <flow name="get:/service/order:poc_nisc_service_delivery_system_api-config">
         <flow-ref name="getAllServiceOrderByFilters" doc:name="getAllServiceOrderByFilters"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
 
     </flow>
     <flow name="get:/service/order/{id}:poc_nisc_service_delivery_system_api-config">
+        <flow-ref name="setOrderIdVaribleFromURIId" doc:name="setOrderIdVaribleFromURIId"/>
         <flow-ref name="getServiceOrderById" doc:name="getServiceOrderById"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
     <flow name="post:/service/order:application/json:poc_nisc_service_delivery_system_api-config">
+        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="java.util.Map"/>
         <flow-ref name="createAServiceOrderToProcess" doc:name="createAServiceOrderToProcess"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+        <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
+    <sub-flow name="setOrderIdVaribleFromURIId">
+        <set-variable variableName="orderId" value="#[message.inboundProperties.'http.uri.params'.id]" doc:name="set orderId Variable"/>
+    </sub-flow>
     <sub-flow name="setResponseContentType">
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
     </sub-flow>
