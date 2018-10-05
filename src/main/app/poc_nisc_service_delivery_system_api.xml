@@ -14,6 +14,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <flow-ref name="setOrderIdVaribleFromURIId" doc:name="setOrderIdVaribleFromURIId"/>
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
         <flow-ref name="updateServiceOrderById" doc:name="updateServiceOrderById"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
         <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
@@ -26,6 +27,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
     <flow name="get:/service/order:poc_nisc_service_delivery_system_api-config">
         <flow-ref name="getAllServiceOrderByFilters" doc:name="getAllServiceOrderByFilters"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <flow-ref name="setResponseContentType" doc:name="setResponseContentType"/>
 
     </flow>
     <flow name="get:/service/order/{id}:poc_nisc_service_delivery_system_api-config">
